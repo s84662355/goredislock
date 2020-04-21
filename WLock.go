@@ -1,7 +1,7 @@
 package goredislock
 
 import (
-	"goredislock/script"
+	"github.com/s84662355/goredislock/script"
 	"time"
 	"fmt"
 	"github.com/go-redis/redis"
