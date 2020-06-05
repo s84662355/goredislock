@@ -1,7 +1,7 @@
 package goredislock
 
 import (
-	"github.com/s84662355/goredislock/script"
+	"goredislock/script"
 	"time"
 	"fmt"
 	"github.com/go-redis/redis"
@@ -41,14 +41,13 @@ func (l *WLock) UnLock(key string) bool{
 
 func (l *WLock)  lockEval(key string , expire int ) bool{
 	var updateRecordExpireScript = redis.NewScript(script.GetWLock())
-	res , err := updateRecordExpireScript.Run(l.redisClient, []string{ key },expire,l.clientname ).Result()
-	if err != nil {
-		variant := fmt.Sprintf(" 脚本执行失败 %s ", err)
-		panic(variant)
+	res , _ := updateRecordExpireScript.Run(l.redisClient, []string{ key },expire,l.clientname ).Result()
+
+	if res != nil && res.(string) == "OK"{
+		 return  true
 	}
-	if  res.(int64) == 1{
-		return  true
-	}
+
+ 
 	return  false
 }
 
